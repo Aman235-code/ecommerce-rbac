@@ -79,7 +79,7 @@ export const CartProvider = ({ children }) => {
     try {
       await Promise.all(
         cart.map((item) =>
-          fetch(`http://localhost:4000/cart/${item.productId}`, {
+          fetch(`http://localhost:4000/cart/${item.Product.productId}`, {
             method: "DELETE",
             headers: { Authorization: `Bearer ${token}` },
           })

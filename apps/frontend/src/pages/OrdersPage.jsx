@@ -3,38 +3,45 @@ import { useAuth } from "../context/AuthContext";
 
 export default function OrdersPage() {
   const { user } = useAuth();
+  console.log(user);
   const [orders, setOrders] = useState([]);
+  const token = localStorage.getItem("token"); 
 
   useEffect(() => {
-    const all = JSON.parse(localStorage.getItem("orders") || "[]");
-    if (!user) setOrders([]);
-    else setOrders(all.filter((o) => o.userId === user.id));
+    const fetchOrders = async () => {
+      try {
+        const res = await fetch("http://localhost:4000/orders", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+        setOrders(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    if (user) fetchOrders();
   }, [user]);
 
-  if (!user) return <div className="p-6">Please login to view orders.</div>;
-
-  if (orders.length === 0) return <div className="p-6">No orders yet.</div>;
-
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-4">
-      <h2 className="text-2xl font-bold">Your Orders</h2>
-      {orders.map((o) => (
-        <div key={o.id} className="border p-4 rounded-lg">
-          <div className="flex justify-between">
-            <div>Order #{o.id}</div>
-            <div className="font-semibold">{o.status}</div>
-          </div>
-          <div className="text-sm text-gray-500">
-            {new Date(o.createdAt).toLocaleString()}
-          </div>
-          <ul className="mt-2 list-disc ml-6">
-            {o.items.map((it, idx) => (
-              <li key={idx}>
-                {it.quantity} × {it.name} — ₹{it.unitPrice}
-              </li>
+    <div className="max-w-4xl mx-auto p-6">
+      <h2 className="text-2xl font-bold mb-4">My Orders</h2>
+      {orders.length === 0 && <div>No orders yet</div>}
+      {orders.map((order) => (
+        <div key={order.id} className="mb-4 p-4 border rounded">
+          <div className="font-semibold">Order #{order.id}</div>
+          <div>Status: {order.status}</div>
+          <div>Total: ₹{order.total}</div>
+          <div className="mt-2">
+            {order.items.map((i) => (
+              <div key={i.id} className="flex justify-between">
+                <div>
+                  {i.product.name} × {i.quantity}
+                </div>
+                <div>₹{(i.product.price * i.quantity).toFixed(2)}</div>
+              </div>
             ))}
-          </ul>
-          <div className="mt-2 font-semibold">Total: ₹{o.total.toFixed(2)}</div>
+          </div>
         </div>
       ))}
     </div>
