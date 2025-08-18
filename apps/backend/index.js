@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import pkg from "@prisma/client";
+import authRoutes from "./routes/auth.js";
 
 dotenv.config();
 const { PrismaClient } = pkg;
@@ -12,6 +13,9 @@ app.use(cors({ origin: process.env.CORS_ORIGIN || "*" }));
 app.use(express.json());
 
 app.get("/", (req, res) => res.json({ ok: true }));
+
+// auth routes
+app.use("/auth", authRoutes);
 
 // list products
 app.get("/products", async (req, res) => {

@@ -9,22 +9,68 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import OrdersPage from "./pages/OrdersPage";
 import AdminProducts from "./pages/AdminProducts";
+import { ProtectedRoute, AdminRoute } from "./components/ProtectedRoute";
+import UnauthorizedPage from "./pages/UnauthorizedPage";
+import { Toaster } from "react-hot-toast";
 
 export default function App() {
   return (
     <Router>
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+        toastOptions={{
+          success: { duration: 3000 },
+          error: { duration: 5000 },
+        }}
+      />
       <div className="min-h-screen bg-gray-50">
         <Navbar />
         <div className="p-6">
           <Routes>
             <Route path="/" element={<ProductsPage />} />
             <Route path="/product/:id" element={<ProductDetail />} />
-            <Route path="/cart" element={<CartPage />} />
-            <Route path="/checkout" element={<CheckoutPage />} />
+
+            {/* Protected user routes */}
+            <Route
+              path="/cart"
+              element={
+                <ProtectedRoute>
+                  <CartPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/checkout"
+              element={
+                <ProtectedRoute>
+                  <CheckoutPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/orders"
+              element={
+                <ProtectedRoute>
+                  <OrdersPage />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Auth routes */}
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
-            <Route path="/orders" element={<OrdersPage />} />
-            <Route path="/admin" element={<AdminProducts />} />
+
+            {/* Admin only */}
+            <Route
+              path="/admin"
+              element={
+                <AdminRoute>
+                  <AdminProducts />
+                </AdminRoute>
+              }
+            />
+            <Route path="/unauthorized" element={<UnauthorizedPage />} />
           </Routes>
         </div>
       </div>
