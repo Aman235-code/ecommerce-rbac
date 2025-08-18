@@ -3,7 +3,6 @@ import { FaStar, FaBoxOpen, FaCartPlus } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
 
 export default function ProductCard({ product, user }) {
- 
   const { addToCart } = useCart();
 
   return (
@@ -48,8 +47,8 @@ export default function ProductCard({ product, user }) {
           <FaBoxOpen /> Available: {product.inventory || 0}
         </div>
 
-        {/* Add to Cart button (only if logged in) */}
-        {user && (
+        {/* Add to Cart button (only if user is not ADMIN) */}
+        {user && user.role !== "ADMIN" && (
           <button
             onClick={() => addToCart(product)}
             className="mt-3 w-full bg-indigo-500 text-white flex items-center justify-center gap-2 py-2 hover:bg-indigo-600 transition"
