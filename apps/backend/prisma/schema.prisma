@@ -11,9 +11,10 @@ model Product {
   id          Int      @id @default(autoincrement())
   name        String
   description String
-  price       Float
+  price       Decimal  @db.Decimal(10, 2)
   category    String
-  inventory   Int
+  inventory   Int      @default(0)
+  image       String? // optional
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 

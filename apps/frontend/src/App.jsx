@@ -11,19 +11,12 @@ import OrdersPage from "./pages/OrdersPage";
 import AdminProducts from "./pages/AdminProducts";
 import { ProtectedRoute, AdminRoute } from "./components/ProtectedRoute";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
-import { Toaster } from "react-hot-toast";
+
 
 export default function App() {
   return (
     <Router>
-      <Toaster
-        position="top-center"
-        reverseOrder={false}
-        toastOptions={{
-          success: { duration: 3000 },
-          error: { duration: 5000 },
-        }}
-      />
+    
       <div className="min-h-screen bg-gray-50">
         <Navbar />
         <div className="p-6">

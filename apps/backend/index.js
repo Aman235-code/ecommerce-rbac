@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import pkg from "@prisma/client";
 import authRoutes from "./routes/auth.js";
+import productRoutes from "./routes/products.js";
 
 dotenv.config();
 const { PrismaClient } = pkg;
@@ -16,14 +17,7 @@ app.get("/", (req, res) => res.json({ ok: true }));
 
 // auth routes
 app.use("/auth", authRoutes);
-
-// list products
-app.get("/products", async (req, res) => {
-  const products = await prisma.product.findMany({
-    orderBy: { createdAt: "desc" },
-  });
-  res.json(products);
-});
+app.use("/products", productRoutes);
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => console.log(`Backend listening on ${port}`));
