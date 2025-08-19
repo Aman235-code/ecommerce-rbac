@@ -1,7 +1,7 @@
 import React from "react";
 import { renderHook, act } from "@testing-library/react";
 
-// Mock the CartContext module completely
+// Fully mock CartContext
 jest.mock("../context/CartContext", () => {
   const React = require("react");
   return {
