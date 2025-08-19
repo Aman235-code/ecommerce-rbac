@@ -7,14 +7,14 @@ const prisma = new PrismaClient();
 // Create a new order
 router.post("/", verifyToken, async (req, res) => {
   const { items, total } = req.body;
-  console.log(items, total);
+ 
 
   if (!items || items.length === 0)
     return res.status(400).json({ error: "Cart is empty" });
 
   try {
     // Create order
-    console.log(req.user);
+  
     const order = await prisma.order.create({
       data: {
         userId: req.user.id,
@@ -32,7 +32,7 @@ router.post("/", verifyToken, async (req, res) => {
       },
     });
 
-    console.log(order);
+   
 
     // Reduce product inventory
     for (const item of items) {

@@ -9,7 +9,7 @@ import {
   FaTrash,
   FaAlignLeft,
 } from "react-icons/fa";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 export default function AdminProducts() {
   const { user, token } = useAuth();
@@ -26,10 +26,22 @@ export default function AdminProducts() {
     image: "",
   });
 
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
+
+  const paginatedProducts = products.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+  const totalPages = Math.ceil(products.length / itemsPerPage);
+
   // Fetch all products
   async function fetchProducts() {
     setLoading(true);
-    const res = await fetch("http://localhost:4000/products");
+    const res = await fetch("http://localhost:4000/products", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     const data = await res.json();
     setProducts(data);
     setLoading(false);
@@ -232,7 +244,7 @@ export default function AdminProducts() {
       {/* Products Grid */}
       <div className="grid md:grid-cols-3 gap-6">
         {loading
-          ? Array(6)
+          ? Array(itemsPerPage)
               .fill(0)
               .map((_, i) => (
                 <div
@@ -240,7 +252,7 @@ export default function AdminProducts() {
                   className="bg-gray-200 animate-pulse h-52 rounded shadow"
                 ></div>
               ))
-          : products.map((p) => (
+          : paginatedProducts.map((p) => (
               <div
                 key={p.id}
                 className="bg-white p-4 rounded shadow hover:shadow-lg transform hover:-translate-y-1 transition flex flex-col"
@@ -258,13 +270,10 @@ export default function AdminProducts() {
                   <FaDollarSign /> ₹{p.price}
                 </div>
 
-                {/* Inventory */}
                 <div className="flex items-center gap-2 mb-2">
                   <FaBoxes />
                   <span
-                    className={
-                      p.inventory <= 5 ? "text-red-600 font-semibold" : ""
-                    }
+                    className={p.inventory <= 5 ? "text-red-600 font-semibold" : ""}
                   >
                     {p.inventory}
                   </span>
@@ -302,14 +311,45 @@ export default function AdminProducts() {
             ))}
       </div>
 
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex justify-center gap-2 mt-6">
+          <button
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            className="px-3 py-1 border rounded disabled:opacity-50"
+          >
+            Prev
+          </button>
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentPage(i + 1)}
+              className={`px-3 py-1 border rounded ${
+                currentPage === i + 1 ? "bg-indigo-600 text-white" : ""
+              }`}
+            >
+              {i + 1}
+            </button>
+          ))}
+          <button
+            onClick={() =>
+              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+            }
+            disabled={currentPage === totalPages}
+            className="px-3 py-1 border rounded disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
+      )}
+
       {/* Delete Modal */}
       {deleteId && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
           <div className="bg-white p-6 rounded shadow-md w-80">
             <h3 className="text-lg font-semibold mb-4">Confirm Delete</h3>
-            <p className="mb-4">
-              Are you sure you want to delete this product?
-            </p>
+            <p className="mb-4">Are you sure you want to delete this product?</p>
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setDeleteId(null)}

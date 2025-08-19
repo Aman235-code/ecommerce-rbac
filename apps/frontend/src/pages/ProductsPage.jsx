@@ -3,25 +3,17 @@ import React, { useEffect, useMemo, useState } from "react";
 import Pagination from "../components/Pagination";
 import ProductCard from "../components/ProductCard";
 import { useAuth } from "../context/AuthContext";
+import { useProducts } from "../context/ProductsContext";
 
 export default function ProductsPage() {
   const { user } = useAuth();
-
-  const [products, setProducts] = useState([]);
+  const { products, fetchProducts } = useProducts();
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await fetch("http://localhost:4000/products");
-        const data = await res.json();
-        setProducts(data);
-      } catch (err) {
-        console.error("Failed to fetch products:", err);
-      }
-    };
-
     fetchProducts();
   }, []);
+
+ 
 
   const [filters, setFilters] = useState({
     q: "",
@@ -31,12 +23,6 @@ export default function ProductsPage() {
   });
   const [page, setPage] = useState(1);
   const pageSize = 6;
-
-  // useEffect(() => {
-  //   const existing = localStorage.getItem("products");
-  //   if (!existing)
-  //     localStorage.setItem("products", JSON.stringify(initialProducts));
-  // }, []);
 
   const categories = useMemo(
     () => [...new Set(products.map((p) => p.category))],

@@ -4,15 +4,8 @@ import { useCart } from "../context/CartContext";
 import { FaBoxOpen, FaTag, FaTrash } from "react-icons/fa";
 
 export default function CartPage() {
-  const {
-    cart,
-    addToCart,
-    updateQuantity,
-    increaseQuantity,
-    decreaseQuantity,
-    removeFromCart,
-    clearCart,
-  } = useCart();
+  const { cart, increaseQuantity, decreaseQuantity, removeFromCart } =
+    useCart();
 
   const total = cart.reduce((s, i) => s + i.Product.price * i.quantity, 0);
 
@@ -86,7 +79,7 @@ export default function CartPage() {
                 ₹{(item.Product.price * item.quantity).toFixed(2)}
               </div>
               <button
-                onClick={() => removeFromCart(item.id)}
+                onClick={() => removeFromCart(item)}
                 className="text-red-500 flex items-center gap-1"
               >
                 <FaTrash /> Remove
@@ -100,12 +93,12 @@ export default function CartPage() {
       <div className="mt-6 flex flex-col sm:flex-row justify-between items-center gap-3">
         <div className="text-lg font-semibold">Total: ₹{total.toFixed(2)}</div>
         <div className="flex gap-3">
-          <button
+          {/* <button
             onClick={clearCart}
             className="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300 transition"
           >
             Clear
-          </button>
+          </button> */}
           <Link
             to="/checkout"
             className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition"

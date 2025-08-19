@@ -10,7 +10,7 @@ export default function Navbar() {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
+ 
 
   const navLinks = [
     { name: "Products", path: "/" },
@@ -65,9 +65,9 @@ export default function Navbar() {
                 className="relative text-gray-700 hover:text-indigo-600 transition"
               >
                 <FaShoppingCart className="text-2xl" />
-                {totalItems > 0 && (
+                {cart.length > 0 && (
                   <span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs rounded-full px-2">
-                    {totalItems}
+                    {cart.length}
                   </span>
                 )}
               </Link>
@@ -143,9 +143,9 @@ export default function Navbar() {
                 className="relative text-gray-700 hover:text-indigo-600 transition"
               >
                 <FaShoppingCart className="text-2xl" />
-                {totalItems > 0 && (
+                {cart.length > 0 && (
                   <span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs rounded-full px-2">
-                    {totalItems}
+                    {cart.length}
                   </span>
                 )}
               </Link>

@@ -1,11 +1,15 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { useAuth } from "./AuthContext"; // to get token
+import { useAuth } from "./AuthContext";
+import { useProducts } from "./ProductsContext";
+import toast from "react-hot-toast";
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const { user, token } = useAuth();
   const [cart, setCart] = useState([]);
+
+  const { fetchProducts } = useProducts();
 
   // Fetch cart from backend
   const fetchCart = async () => {
@@ -15,10 +19,10 @@ export const CartProvider = ({ children }) => {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
-      console.log(data);
       setCart(data);
+    
     } catch (err) {
-      console.error("Failed to fetch cart:", err);
+      toast.error("Failed to fetch cart");
     }
   };
 
@@ -27,9 +31,12 @@ export const CartProvider = ({ children }) => {
   }, [user]);
 
   const addToCart = async (product) => {
-    if (!user) return alert("Login required");
+    if (!user) {
+      toast.error("Please login to add items to cart");
+      return;
+    }
     try {
-      await fetch("http://localhost:4000/cart", {
+      const res = await fetch("http://localhost:4000/cart", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -37,9 +44,18 @@ export const CartProvider = ({ children }) => {
         },
         body: JSON.stringify({ productId: product.id, quantity: 1 }),
       });
-      fetchCart();
+
+      const data = await res.json();
+
+      if (res.ok) {
+        fetchCart();
+        fetchProducts();
+        toast.success(`${product.name} added to cart`);
+      } else {
+        toast.error(data.error || "Failed to add item to cart");
+      }
     } catch (err) {
-      console.error("Failed to add to cart:", err);
+      toast.error("Failed to add item to cart");
     }
   };
 
@@ -55,22 +71,25 @@ export const CartProvider = ({ children }) => {
         body: JSON.stringify({ quantity }),
       });
       fetchCart();
+      toast.success("Cart updated");
     } catch (err) {
-      console.error("Failed to update quantity:", err);
+      toast.error("Failed to update quantity");
     }
   };
 
-  const removeFromCart = async (cartId) => {
-    console.log("hkh", cartId);
+  const removeFromCart = async (cartItem) => {
     if (!user) return;
+
     try {
-      await fetch(`http://localhost:4000/cart/${cartId}`, {
+      await fetch(`http://localhost:4000/cart/delete/${cartItem.id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
+
       fetchCart();
+      toast.success("Item removed from cart");
     } catch (err) {
-      console.error("Failed to remove item:", err);
+      toast.error("Failed to remove item");
     }
   };
 
@@ -85,19 +104,22 @@ export const CartProvider = ({ children }) => {
           })
         )
       );
+      fetchProducts();
       setCart([]);
+      toast.success("Cart cleared");
     } catch (err) {
-      console.error("Failed to clear cart:", err);
+      toast.error("Failed to clear cart");
     }
   };
 
   const increaseQuantity = async (item) => {
-    console.log(item.Product.inventory, item.quantity);
-    if (item.quantity >= item.Product.inventory) {
-      alert("Cannot add more, inventory limit reached");
+   
+    if (item.Product.inventory <= 0) {
+      toast.error("Inventory limit reached");
       return;
     }
     try {
+    
       await fetch(`http://localhost:4000/cart/${item.productId}`, {
         method: "PUT",
         headers: {
@@ -106,22 +128,26 @@ export const CartProvider = ({ children }) => {
         },
         body: JSON.stringify({ quantity: item.quantity + 1, decrement: false }),
       });
-      fetchCart(); // refresh cart
+  
+      fetchCart();
+      fetchProducts();
+      toast.success("Quantity increased");
     } catch (err) {
-      console.error("Failed to increase quantity:", err);
+      toast.error("Failed to increase quantity");
     }
   };
 
   const decreaseQuantity = async (item) => {
     const newQty = item.quantity - 1;
-    console.log(item);
+
     try {
       if (newQty <= 0) {
-        // remove item if quantity goes to 0
         await fetch(`http://localhost:4000/cart/${item.id}`, {
           method: "DELETE",
           headers: { Authorization: `Bearer ${token}` },
         });
+
+        toast.success("Item removed from cart");
       } else {
         await fetch(`http://localhost:4000/cart/${item.productId}`, {
           method: "PUT",
@@ -131,10 +157,12 @@ export const CartProvider = ({ children }) => {
           },
           body: JSON.stringify({ quantity: newQty, decrement: true }),
         });
+        toast.success("Quantity decreased");
       }
-      fetchCart(); // refresh cart
+      fetchCart();
+      fetchProducts();
     } catch (err) {
-      console.error("Failed to decrease quantity:", err);
+      toast.error("Failed to decrease quantity");
     }
   };
 

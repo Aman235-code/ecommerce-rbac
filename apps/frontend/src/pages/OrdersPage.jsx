@@ -3,7 +3,6 @@ import { useAuth } from "../context/AuthContext";
 
 export default function OrdersPage() {
   const { user } = useAuth();
-  console.log(user);
   const [orders, setOrders] = useState([]);
   const token = localStorage.getItem("token"); 
 

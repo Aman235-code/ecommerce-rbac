@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function CheckoutPage() {
   const { cart, clearCart } = useCart();
-  console.log(cart)
+ 
   const { user } = useAuth();
   const nav = useNavigate();
   const [processing, setProcessing] = useState(false);
@@ -45,7 +45,7 @@ export default function CheckoutPage() {
       });
 
       const data = await res.json();
-      console.log(data)
+   
 
       if (!res.ok) throw new Error(data.error || "Failed to place order");
 
