@@ -1,13 +1,15 @@
 // routes/products.js
 import express from "express";
 import pkg from "@prisma/client";
+import { adminAuth } from "../middleware/adminAuth.js";
 
 const { PrismaClient } = pkg;
 const prisma = new PrismaClient();
 const router = express.Router();
 
 // GET all products
-router.get("/", async (req, res) => {
+router.get("/",
+  async (req, res) => {
   try {
     const products = await prisma.product.findMany({
       orderBy: { createdAt: "desc" },
@@ -21,7 +23,7 @@ router.get("/", async (req, res) => {
 });
 
 // GET single product by id
-router.get("/:id", async (req, res) => {
+router.get("/:id",adminAuth, async (req, res) => {
   const { id } = req.params;
   try {
     const product = await prisma.product.findUnique({
@@ -36,7 +38,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // POST /products - create a new product (admin only)
-router.post("/add", async (req, res) => {
+router.post("/add",adminAuth, async (req, res) => {
   try {
     const { name, description, price, category, inventory, image } = req.body;
     if (!name || !price)
@@ -54,7 +56,7 @@ router.post("/add", async (req, res) => {
 });
 
 // PUT /products/update/:id - update product (admin)
-router.put("/update/:id", async (req, res) => {
+router.put("/update/:id",adminAuth, async (req, res) => {
   try {
     const { id } = req.params;
     const { name, description, price, category, inventory, image } = req.body;
@@ -73,7 +75,7 @@ router.put("/update/:id", async (req, res) => {
 });
 
 // DELETE /products/delete/:id - delete product (admin)
-router.delete("/delete/:id", async (req, res) => {
+router.delete("/delete/:id",adminAuth, async (req, res) => {
   try {
     const { id } = req.params;
     await prisma.product.delete({ where: { id: Number(id) } });
