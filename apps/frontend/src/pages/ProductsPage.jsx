@@ -13,8 +13,6 @@ export default function ProductsPage() {
     fetchProducts();
   }, []);
 
- 
-
   const [filters, setFilters] = useState({
     q: "",
     category: "",
@@ -109,14 +107,13 @@ export default function ProductsPage() {
         </button>
       </div>
 
-      {/* Products Grid */}
+    
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {pageItems.map((product) => (
           <ProductCard key={product.id} product={product} user={user} />
         ))}
       </div>
 
-      {/* Pagination */}
       <Pagination
         page={page}
         setPage={setPage}

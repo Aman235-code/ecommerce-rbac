@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
 
   async function register({ email, password }) {
     try {
-      const res = await fetch("http://localhost:4000/auth/signup", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -41,16 +41,16 @@ export const AuthProvider = ({ children }) => {
       const data = await res.json();
       setUser(data.user);
       setToken(data.token);
-      toast.success("Signup successful! 🎉");
+      toast.success("Signup successful!");
     } catch (err) {
-      toast.error(err.message || "Signup failed ❌");
+      toast.error(err.message || "Signup failed");
       throw err;
     }
   }
 
   async function login({ email, password }) {
     try {
-      const res = await fetch("http://localhost:4000/auth/login", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -64,9 +64,9 @@ export const AuthProvider = ({ children }) => {
       const data = await res.json();
       setUser(data.user);
       setToken(data.token);
-      toast.success("Login successful! 🎉");
+      toast.success("Login successful!");
     } catch (err) {
-      toast.error(err.message || "Login failed ❌");
+      toast.error(err.message || "Login failed");
       throw err;
     }
   }
@@ -74,7 +74,7 @@ export const AuthProvider = ({ children }) => {
   function logout() {
     setUser(null);
     setToken(null);
-    toast.success("Logged out successfully ✅");
+    toast.success("Logged out successfully");
   }
 
   return (

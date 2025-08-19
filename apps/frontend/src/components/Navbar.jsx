@@ -10,8 +10,6 @@ export default function Navbar() {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
 
- 
-
   const navLinks = [
     { name: "Products", path: "/" },
     { name: "Admin", path: "/admin" },
@@ -20,12 +18,10 @@ export default function Navbar() {
   return (
     <nav className="bg-white shadow-md px-6 py-4 sticky top-0 z-50">
       <div className="max-w-6xl mx-auto flex items-center justify-between">
-        {/* Logo */}
         <Link to="/" className="text-2xl font-bold text-indigo-600">
           E-Shop
         </Link>
 
-        {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
             <Link
@@ -36,13 +32,12 @@ export default function Navbar() {
               }`}
             >
               {link.name}
-              {/* Hover underline animation */}
+
               <span className="absolute left-1/2 bottom-0 w-0 h-0.5 bg-red-500 transition-all group-hover:w-full group-hover:left-0"></span>
             </Link>
           ))}
         </div>
 
-        {/* Right Section */}
         <div className="hidden md:flex items-center gap-4">
           {user ? (
             <>
@@ -59,7 +54,6 @@ export default function Navbar() {
                 Logout
               </button>
 
-              {/* Cart Icon only if logged in */}
               <Link
                 to="/cart"
                 className="relative text-gray-700 hover:text-indigo-600 transition"
@@ -90,7 +84,6 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Mobile Menu Button */}
         <div className="md:hidden flex items-center">
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
@@ -101,7 +94,6 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {mobileOpen && (
         <div className="md:hidden mt-4 flex flex-col gap-4">
           {navLinks.map((link) => (
@@ -136,7 +128,6 @@ export default function Navbar() {
                 Logout
               </button>
 
-              {/* Mobile cart icon */}
               <Link
                 to="/cart"
                 onClick={() => setMobileOpen(false)}

@@ -29,7 +29,7 @@ export default function CartPage() {
             key={item.id}
             className="bg-white p-4 rounded-lg shadow flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
           >
-            {/* Image */}
+          
             {item.Product && (
               <img
                 src={item.Product.image}
@@ -38,7 +38,6 @@ export default function CartPage() {
               />
             )}
 
-            {/* Info */}
             <div className="flex-1">
               <div className="font-semibold text-lg">{item.Product.name}</div>
               {item.Product.category && (
@@ -56,7 +55,7 @@ export default function CartPage() {
               </div>
             </div>
 
-            {/* Quantity controls */}
+           
             <div className="flex items-center gap-2">
               <button
                 onClick={() => decreaseQuantity(item)}
@@ -73,7 +72,6 @@ export default function CartPage() {
               </button>
             </div>
 
-            {/* Price & Remove */}
             <div className="flex flex-col items-end gap-2">
               <div className="font-semibold">
                 ₹{(item.Product.price * item.quantity).toFixed(2)}
@@ -89,7 +87,7 @@ export default function CartPage() {
         ))}
       </div>
 
-      {/* Total & Actions */}
+  
       <div className="mt-6 flex flex-col sm:flex-row justify-between items-center gap-3">
         <div className="text-lg font-semibold">Total: ₹{total.toFixed(2)}</div>
         <div className="flex gap-3">

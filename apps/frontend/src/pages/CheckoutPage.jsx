@@ -11,7 +11,7 @@ export default function CheckoutPage() {
   const [processing, setProcessing] = useState(false);
   const token = localStorage.getItem("token");
 
-  // Calculate total price
+ 
   const total = cart.reduce((s, i) => s + i.Product.price * i.quantity, 0);
 
   const submit = async () => {
@@ -28,9 +28,9 @@ export default function CheckoutPage() {
     setProcessing(true);
 
     try {
-      // Send order to backend
+    
      
-      const res = await fetch("http://localhost:4000/orders", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/orders`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -49,10 +49,9 @@ export default function CheckoutPage() {
 
       if (!res.ok) throw new Error(data.error || "Failed to place order");
 
-      // Clear cart in frontend
+     
       clearCart();
 
-      // Navigate to orders page
       nav("/orders");
     } catch (err) {
       console.error(err);

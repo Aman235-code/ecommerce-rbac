@@ -9,12 +9,12 @@ export const CartProvider = ({ children }) => {
   const { user, token } = useAuth();
   const [cart, setCart] = useState([]);
 
-  const { fetchProducts,products } = useProducts();
+  const { fetchProducts } = useProducts();
 
   const fetchCart = async () => {
     if (!user) return setCart([]);
     try {
-      const res = await fetch("http://localhost:4000/cart", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/cart`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -34,7 +34,7 @@ export const CartProvider = ({ children }) => {
       return;
     }
     try {
-      const res = await fetch("http://localhost:4000/cart", {
+      const res = await fetch(`h${import.meta.env.VITE_API_URL}/cart`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -61,7 +61,7 @@ export const CartProvider = ({ children }) => {
     if (!user) return;
 
     try {
-      await fetch(`http://localhost:4000/cart/delete/${cartItem.id}`, {
+      await fetch(`${import.meta.env.VITE_API_URL}/cart/delete/${cartItem.id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -79,7 +79,7 @@ export const CartProvider = ({ children }) => {
     try {
       await Promise.all(
         cart.map((item) =>
-          fetch(`http://localhost:4000/cart/clearcart/${item.Product.id}`, {
+          fetch(`${import.meta.env.VITE_API_URL}/cart/clearcart/${item.Product.id}`, {
             method: "DELETE",
             headers: { Authorization: `Bearer ${token}` },
           })
@@ -99,7 +99,7 @@ export const CartProvider = ({ children }) => {
       return;
     }
     try {
-      await fetch(`http://localhost:4000/cart/${item.productId}`, {
+      await fetch(`${import.meta.env.VITE_API_URL}/cart/${item.productId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -121,14 +121,14 @@ export const CartProvider = ({ children }) => {
 
     try {
       if (newQty <= 0) {
-        await fetch(`http://localhost:4000/cart/${item.id}`, {
+        await fetch(`${import.meta.env.VITE_API_URL}/cart/${item.id}`, {
           method: "DELETE",
           headers: { Authorization: `Bearer ${token}` },
         });
 
         toast.success("Item removed from cart");
       } else {
-        await fetch(`http://localhost:4000/cart/${item.productId}`, {
+        await fetch(`${import.meta.env.VITE_API_URL}/cart/${item.productId}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",

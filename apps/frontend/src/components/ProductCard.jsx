@@ -7,7 +7,7 @@ export default function ProductCard({ product, user }) {
 
   return (
     <div className="bg-white border border-gray-300 shadow-md hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col h-full">
-      {/* Image */}
+  
       <div className="h-48 w-full overflow-hidden">
         <img
           src={product.image}
@@ -16,7 +16,7 @@ export default function ProductCard({ product, user }) {
         />
       </div>
 
-      {/* Info */}
+     
       <div className="p-4 flex-1 flex flex-col justify-between">
         <div>
           <h3 className="text-lg font-semibold text-gray-800 mb-1">
@@ -47,7 +47,6 @@ export default function ProductCard({ product, user }) {
           <FaBoxOpen /> Available: {product.inventory || 0}
         </div>
 
-        {/* Add to Cart button (only if user is not ADMIN) */}
         {user && user.role !== "ADMIN" && (
           <button
             onClick={() => addToCart(product)}

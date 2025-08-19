@@ -24,7 +24,6 @@ export default function App() {
             <Route path="/" element={<ProductsPage />} />
             <Route path="/product/:id" element={<ProductDetail />} />
 
-            {/* Protected user routes */}
             <Route
               path="/cart"
               element={
@@ -50,11 +49,11 @@ export default function App() {
               }
             />
 
-            {/* Auth routes */}
+           
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
 
-            {/* Admin only */}
+           
             <Route
               path="/admin"
               element={

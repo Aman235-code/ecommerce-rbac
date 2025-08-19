@@ -16,7 +16,7 @@ export default function AdminProducts() {
   const [products, setProducts] = useState([]);
   const [editing, setEditing] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [deleteId, setDeleteId] = useState(null); // for delete modal
+  const [deleteId, setDeleteId] = useState(null); 
   const [form, setForm] = useState({
     name: "",
     description: "",
@@ -26,7 +26,7 @@ export default function AdminProducts() {
     image: "",
   });
 
-  // Pagination
+
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
@@ -36,10 +36,10 @@ export default function AdminProducts() {
   );
   const totalPages = Math.ceil(products.length / itemsPerPage);
 
-  // Fetch all products
+ 
   async function fetchProducts() {
     setLoading(true);
-    const res = await fetch("http://localhost:4000/products", {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/products`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();
@@ -51,13 +51,13 @@ export default function AdminProducts() {
     if (user?.role === "ADMIN") fetchProducts();
   }, [user]);
 
-  // Add or Update product
+
   async function upsert() {
     if (!form.name || !form.price) return;
 
     const url = editing?.id
-      ? `http://localhost:4000/products/update/${editing.id}`
-      : "http://localhost:4000/products/add";
+      ? `${import.meta.env.VITE_API_URL}/products/update/${editing.id}`
+      : `${import.meta.env.VITE_API_URL}/products/add`;
 
     const method = editing?.id ? "PUT" : "POST";
 
@@ -91,11 +91,10 @@ export default function AdminProducts() {
     });
   }
 
-  // Delete product after modal confirmation
   async function confirmDelete() {
     if (!deleteId) return;
 
-    await fetch(`http://localhost:4000/products/delete/${deleteId}`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/products/delete/${deleteId}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -127,7 +126,7 @@ export default function AdminProducts() {
         </button>
       )}
 
-      {/* Form */}
+
       {editing && (
         <div className="bg-white p-6 shadow-md mb-6 rounded-md space-y-4">
           <h3 className="text-xl font-semibold mb-4">
@@ -241,7 +240,7 @@ export default function AdminProducts() {
         </div>
       )}
 
-      {/* Products Grid */}
+   
       <div className="grid md:grid-cols-3 gap-6">
         {loading
           ? Array(itemsPerPage)
@@ -311,7 +310,7 @@ export default function AdminProducts() {
             ))}
       </div>
 
-      {/* Pagination */}
+  
       {totalPages > 1 && (
         <div className="flex justify-center gap-2 mt-6">
           <button
@@ -344,7 +343,7 @@ export default function AdminProducts() {
         </div>
       )}
 
-      {/* Delete Modal */}
+
       {deleteId && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
           <div className="bg-white p-6 rounded shadow-md w-80">
