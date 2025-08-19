@@ -68,17 +68,20 @@ export default function Navbar() {
                 Logout
               </button>
 
-              <Link
-                to="/cart"
-                className="relative text-gray-700 hover:text-indigo-600 transition"
-              >
-                <FaShoppingCart className="text-2xl" />
-                {cart.length > 0 && (
-                  <span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs rounded-full px-2">
-                    {cart.length}
-                  </span>
-                )}
-              </Link>
+              {/* Show cart only for non-admin users */}
+              {user.role !== "ADMIN" && (
+                <Link
+                  to="/cart"
+                  className="relative text-gray-700 hover:text-indigo-600 transition"
+                >
+                  <FaShoppingCart className="text-2xl" />
+                  {cart.length > 0 && (
+                    <span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs rounded-full px-2">
+                      {cart.length}
+                    </span>
+                  )}
+                </Link>
+              )}
             </>
           ) : (
             <>
@@ -158,18 +161,21 @@ export default function Navbar() {
                 Logout
               </button>
 
-              <Link
-                to="/cart"
-                onClick={() => setMobileOpen(false)}
-                className="relative text-gray-700 hover:text-indigo-600 transition"
-              >
-                <FaShoppingCart className="text-2xl" />
-                {cart.length > 0 && (
-                  <span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs rounded-full px-2">
-                    {cart.length}
-                  </span>
-                )}
-              </Link>
+              {/* Show cart only for non-admin users */}
+              {user.role !== "ADMIN" && (
+                <Link
+                  to="/cart"
+                  onClick={() => setMobileOpen(false)}
+                  className="relative text-gray-700 hover:text-indigo-600 transition"
+                >
+                  <FaShoppingCart className="text-2xl" />
+                  {cart.length > 0 && (
+                    <span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs rounded-full px-2">
+                      {cart.length}
+                    </span>
+                  )}
+                </Link>
+              )}
             </>
           ) : (
             <>

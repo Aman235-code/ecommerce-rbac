@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useProducts } from "../context/ProductsContext";
+import { useAuth } from "../context/AuthContext";
 import { FaStar, FaBoxOpen, FaArrowLeft } from "react-icons/fa";
 
 export default function ProductDetail() {
   const { id } = useParams();
   const { products } = useProducts();
   const { addToCart } = useCart();
+  const { user } = useAuth();
   const [product, setProduct] = useState(null);
   const navigate = useNavigate();
 
@@ -71,13 +73,15 @@ export default function ProductDetail() {
           </div>
         </div>
 
-        {/* Add to Cart Button */}
-        <button
-          onClick={() => addToCart(product)}
-          className="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition font-medium"
-        >
-          Add to Cart
-        </button>
+        {/* Add to Cart Button - hide if user is ADMIN */}
+        {user && user.role !== "ADMIN" && (
+          <button
+            onClick={() => addToCart(product)}
+            className="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition font-medium"
+          >
+            Add to Cart
+          </button>
+        )}
       </div>
     </div>
   );
