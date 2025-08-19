@@ -11,7 +11,6 @@ export const CartProvider = ({ children }) => {
 
   const { fetchProducts,products } = useProducts();
 
-  // Fetch cart from backend
   const fetchCart = async () => {
     if (!user) return setCart([]);
     try {
@@ -55,24 +54,6 @@ export const CartProvider = ({ children }) => {
       }
     } catch (err) {
       toast.error("Failed to add item to cart");
-    }
-  };
-
-  const updateQuantity = async (productId, quantity) => {
-    if (!user) return;
-    try {
-      await fetch(`http://localhost:4000/cart/${productId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ quantity }),
-      });
-      fetchCart();
-      toast.success("Cart updated");
-    } catch (err) {
-      toast.error("Failed to update quantity");
     }
   };
 
@@ -169,7 +150,6 @@ export const CartProvider = ({ children }) => {
       value={{
         cart,
         addToCart,
-        updateQuantity,
         increaseQuantity,
         decreaseQuantity,
         removeFromCart,
