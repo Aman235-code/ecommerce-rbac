@@ -38,6 +38,7 @@
     "jest": "^30.0.5",
     "jest-environment-jsdom": "^30.0.5",
     "supertest": "^7.1.4",
+    "util": "^0.12.5",
     "vite": "^7.1.2",
     "vite-plugin-checker": "^0.10.2",
     "whatwg-url": "^14.2.0"
