@@ -9,7 +9,7 @@ export const CartProvider = ({ children }) => {
   const { user, token } = useAuth();
   const [cart, setCart] = useState([]);
 
-  const { fetchProducts } = useProducts();
+  const { fetchProducts,products } = useProducts();
 
   // Fetch cart from backend
   const fetchCart = async () => {
@@ -20,7 +20,6 @@ export const CartProvider = ({ children }) => {
       });
       const data = await res.json();
       setCart(data);
-    
     } catch (err) {
       toast.error("Failed to fetch cart");
     }
@@ -94,17 +93,18 @@ export const CartProvider = ({ children }) => {
   };
 
   const clearCart = async () => {
+   
     if (!user) return;
     try {
       await Promise.all(
         cart.map((item) =>
-          fetch(`http://localhost:4000/cart/${item.Product.productId}`, {
+          fetch(`http://localhost:4000/cart/clearcart/${item.Product.id}`, {
             method: "DELETE",
             headers: { Authorization: `Bearer ${token}` },
           })
         )
       );
-      fetchProducts();
+    
       setCart([]);
       toast.success("Cart cleared");
     } catch (err) {
@@ -113,13 +113,11 @@ export const CartProvider = ({ children }) => {
   };
 
   const increaseQuantity = async (item) => {
-   
     if (item.Product.inventory <= 0) {
       toast.error("Inventory limit reached");
       return;
     }
     try {
-    
       await fetch(`http://localhost:4000/cart/${item.productId}`, {
         method: "PUT",
         headers: {
@@ -128,7 +126,7 @@ export const CartProvider = ({ children }) => {
         },
         body: JSON.stringify({ quantity: item.quantity + 1, decrement: false }),
       });
-  
+
       fetchCart();
       fetchProducts();
       toast.success("Quantity increased");

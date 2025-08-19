@@ -67,13 +67,9 @@ router.post("/", verifyToken, async (req, res) => {
 
 // Update cart quantity and adjust product inventory
 router.put("/:productId", verifyToken, async (req, res) => {
- 
   const { quantity, decrement } = req.body;
- 
 
   const { productId } = req.params;
-
- 
 
   try {
     // Fetch cart item with product
@@ -82,8 +78,6 @@ router.put("/:productId", verifyToken, async (req, res) => {
       include: { Product: true },
     });
 
-   
-
     if (!cartItem)
       return res.status(404).json({ error: "Cart item not found" });
 
@@ -91,11 +85,9 @@ router.put("/:productId", verifyToken, async (req, res) => {
     let diff;
 
     if (decrement) {
-     
       // user is decreasing quantity
       diff = cartItem.quantity - quantity; // should be positive
       availableInventory = cartItem.Product.inventory + diff;
-    
 
       if (quantity < 0)
         return res.status(400).json({ error: "Quantity cannot be negative" });
@@ -103,10 +95,8 @@ router.put("/:productId", verifyToken, async (req, res) => {
       // user is increasing quantity
       diff = quantity - cartItem.quantity; // should be positive
       availableInventory = cartItem.Product.inventory + diff;
-   
 
       if (quantity <= 0) {
-     
         return res
           .status(400)
           .json({ error: "Not enough inventory available" });
@@ -124,14 +114,10 @@ router.put("/:productId", verifyToken, async (req, res) => {
       ? cartItem.Product.inventory + 1
       : cartItem.Product.inventory - 1;
 
-   
-
     await prisma.product.update({
       where: { id: Number(productId) },
       data: { inventory: newInventory },
     });
-
-  
 
     res.json({ success: true, newQuantity: quantity, inventory: newInventory });
   } catch (err) {
@@ -207,6 +193,48 @@ router.delete("/delete/:cartId", verifyToken, async (req, res) => {
   } catch (err) {
     console.error("Failed to remove cart item:", err);
     res.status(500).json({ error: "Failed to remove item" });
+  }
+});
+
+router.delete("/clearcart/:productId", verifyToken, async (req, res) => {
+  const { productId } = req.params;
+
+  try {
+    // Find all cart items for this product
+    const cartItems = await prisma.cartItem.findMany({
+      where: {
+        userId: req.user.id,
+        productId: Number(productId),
+      },
+    });
+
+    if (cartItems.length > 0) {
+      // Calculate total quantity to restore
+      const totalQty = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
+      // Delete all cart items of this product for this user
+      const deleted = await prisma.cartItem.deleteMany({
+        where: {
+          userId: req.user.id,
+          productId: Number(productId),
+        },
+      });
+
+      // Restore inventory
+      await prisma.product.update({
+        where: { id: Number(productId) },
+        data: {
+          inventory: { increment: totalQty },
+        },
+      });
+
+      return res.json({ ok: true, deleted, restored: totalQty });
+    }
+
+    res.json({ ok: true, deleted: 0 });
+  } catch (err) {
+    console.error("Failed to clear cart items:", err);
+    res.status(500).json({ error: "Failed to clear cart" });
   }
 });
 

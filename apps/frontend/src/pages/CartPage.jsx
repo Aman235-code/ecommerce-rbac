@@ -93,12 +93,6 @@ export default function CartPage() {
       <div className="mt-6 flex flex-col sm:flex-row justify-between items-center gap-3">
         <div className="text-lg font-semibold">Total: ₹{total.toFixed(2)}</div>
         <div className="flex gap-3">
-          {/* <button
-            onClick={clearCart}
-            className="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300 transition"
-          >
-            Clear
-          </button> */}
           <Link
             to="/checkout"
             className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition"

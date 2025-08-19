@@ -5,11 +5,11 @@ import { useNavigate } from "react-router-dom";
 
 export default function CheckoutPage() {
   const { cart, clearCart } = useCart();
- 
+
   const { user } = useAuth();
   const nav = useNavigate();
   const [processing, setProcessing] = useState(false);
-  const token = localStorage.getItem("token"); 
+  const token = localStorage.getItem("token");
 
   // Calculate total price
   const total = cart.reduce((s, i) => s + i.Product.price * i.quantity, 0);
@@ -29,6 +29,7 @@ export default function CheckoutPage() {
 
     try {
       // Send order to backend
+     
       const res = await fetch("http://localhost:4000/orders", {
         method: "POST",
         headers: {
@@ -45,7 +46,6 @@ export default function CheckoutPage() {
       });
 
       const data = await res.json();
-   
 
       if (!res.ok) throw new Error(data.error || "Failed to place order");
 

@@ -12,6 +12,7 @@ router.get("/", async (req, res) => {
     const products = await prisma.product.findMany({
       orderBy: { createdAt: "desc" },
     });
+  
     res.json(products);
   } catch (err) {
     console.error("Error fetching products:", err);
