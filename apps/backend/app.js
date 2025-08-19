@@ -1,4 +1,3 @@
-// app.js
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -25,4 +24,4 @@ app.use("/products", productRoutes);
 app.use("/cart", cartRouter);
 app.use("/orders", orderRouter);
 
-export default app; // ✅ export app for Supertest
+export default app; 

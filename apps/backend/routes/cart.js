@@ -11,6 +11,7 @@ router.get("/", verifyToken, async (req, res) => {
     const cart = await prisma.cartItem.findMany({
       where: { userId: req.user.id },
       include: { Product: true },
+      orderBy: { createdAt: "asc" },
     });
     res.json(cart);
   } catch (err) {

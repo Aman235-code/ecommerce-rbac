@@ -34,7 +34,7 @@ export const CartProvider = ({ children }) => {
       return;
     }
     try {
-      const res = await fetch(`h${import.meta.env.VITE_API_URL}/cart`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/cart`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

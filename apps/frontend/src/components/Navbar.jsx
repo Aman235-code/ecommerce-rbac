@@ -22,6 +22,7 @@ export default function Navbar() {
           E-Shop
         </Link>
 
+        {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
             <Link
@@ -32,12 +33,25 @@ export default function Navbar() {
               }`}
             >
               {link.name}
-
               <span className="absolute left-1/2 bottom-0 w-0 h-0.5 bg-red-500 transition-all group-hover:w-full group-hover:left-0"></span>
             </Link>
           ))}
+
+          {/* Orders link only for logged-in users */}
+          {user && (
+            <Link
+              to="/orders"
+              className={`relative text-gray-700 font-medium transition group ${
+                location.pathname === "/orders" ? "text-indigo-600" : ""
+              }`}
+            >
+              Orders
+              <span className="absolute left-1/2 bottom-0 w-0 h-0.5 bg-red-500 transition-all group-hover:w-full group-hover:left-0"></span>
+            </Link>
+          )}
         </div>
 
+        {/* User actions */}
         <div className="hidden md:flex items-center gap-4">
           {user ? (
             <>
@@ -84,6 +98,7 @@ export default function Navbar() {
           )}
         </div>
 
+        {/* Mobile Menu Toggle */}
         <div className="md:hidden flex items-center">
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
@@ -94,6 +109,7 @@ export default function Navbar() {
         </div>
       </div>
 
+      {/* Mobile Menu */}
       {mobileOpen && (
         <div className="md:hidden mt-4 flex flex-col gap-4">
           {navLinks.map((link) => (
@@ -109,6 +125,20 @@ export default function Navbar() {
               <span className="absolute left-1/2 bottom-0 w-0 h-0.5 bg-red-500 transition-all group-hover:w-full group-hover:left-0"></span>
             </Link>
           ))}
+
+          {/* Orders link for mobile */}
+          {user && (
+            <Link
+              to="/orders"
+              onClick={() => setMobileOpen(false)}
+              className={`relative text-gray-700 font-medium transition group ${
+                location.pathname === "/orders" ? "text-indigo-600" : ""
+              }`}
+            >
+              Orders
+              <span className="absolute left-1/2 bottom-0 w-0 h-0.5 bg-red-500 transition-all group-hover:w-full group-hover:left-0"></span>
+            </Link>
+          )}
 
           {user ? (
             <>
