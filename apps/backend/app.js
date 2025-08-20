@@ -13,15 +13,24 @@ export const prisma = new PrismaClient();
 
 const app = express();
 
-app.use(cors({ origin: process.env.CORS_ORIGIN || "*" }));
+app.use(cors({
+  origin: process.env.CORS_ORIGIN ,
+  credentials: true
+}));
+
+
+app.options("*", cors({
+  origin: process.env.CORS_ORIGIN ,
+  credentials: true
+}));
+
 app.use(express.json());
 
 app.get("/", (req, res) => res.json({ ok: true }));
 
-// auth routes
 app.use("/auth", authRoutes);
 app.use("/products", productRoutes);
 app.use("/cart", cartRouter);
 app.use("/orders", orderRouter);
 
-export default app; 
+export default app;
