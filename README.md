@@ -9,7 +9,7 @@ A full-stack e-commerce application with Role-Based Access Control (RBAC), built
 * Database: PostgreSQL with Prisma ORM
 * Authentication: JWT (JSON Web Tokens)
 * Deployment: Frontend → Vercel, Backend → Railway
-* Other Tools: GitHub Actions for CI/CD, pgAdmin for DB management
+* Other Tools: pgAdmin for DB management
 
 ## 🔗 Deployed Links
 
