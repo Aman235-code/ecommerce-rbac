@@ -24,7 +24,6 @@ A full-stack e-commerce application with Role-Based Access Control (RBAC), built
 * Shopping cart with add/update/remove functionality
 * Order management (place and fetch orders)
 * Integration with PostgreSQL using Prisma
-* CI/CD setup for automated deployment
 * Admin credentials seeded automatically
 
 ## 🛠️ Setup Instructions
